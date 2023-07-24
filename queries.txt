@@ -1,0 +1,441 @@
+Microsoft Windows [Version 10.0.19045.3208]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\Star World>mysql -u root -p
+Enter password: ***********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.33 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| classdb            |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+7 rows in set (0.14 sec)
+
+mysql> create database IMDB;
+Query OK, 1 row affected (0.04 sec)
+
+mysql> use IMDB;
+Database changed
+mysql> create table Movie(
+    -> id INT PRIMARY KEY NOT NULL,
+    -> title VARCHAR(255) NOT NULL,
+    -> release_year INT,
+    -> duration VARCHAR(15)
+    -> );
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> insert into movie(id,title,release_year,duration) values(1,'Maamannan',2023, '157m');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into movie(id,title,release_year,duration) values(2,'Vikram',2022,'175m');
+Query OK, 1 row affected (0.01 sec)
+
+
+mysql> select * from Movie;
++----+-----------+--------------+----------+
+| id | title     | release_year | duration |
++----+-----------+--------------+----------+
+|  1 | Maamannan |         2023 | 157m     |
+|  2 | Vikram    |         2022 | 175m     |
++----+-----------+--------------+----------+
+2 rows in set (0.00 sec)
+
+mysql> create table actor(
+    ->
+    -> id int primary key not null,
+    -> first_name varchar(30) not null,
+    -> last_name varchar(30) not null,
+    -> gender varchar(10) check (gender in ('M','F'))
+    ->
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> desc actor;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| id         | int         | NO   | PRI | NULL    |       |
+| first_name | varchar(30) | NO   |     | NULL    |       |
+| last_name  | varchar(30) | NO   |     | NULL    |       |
+| gender     | varchar(10) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.02 sec)
+
+mysql> insert into actor(id,first_name,last_name,gender) values(1,'vadi','velu','m');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into actor(id,first_name,last_name,gender) values(2,'fahadh','faasil','m');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into actor(id,first_name,last_name,gender) values(3,'udayanidhi','stalin','m');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into actor(id,first_name,last_name,gender) values(4,'keerthy','suresh','f');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into actor(id,first_name,last_name,gender) values(5,'kamal','hasan','m');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into actor(id,first_name,last_name,gender) values(6,'vijay','sethubathi','m');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from actor;
++----+------------+------------+--------+
+| id | first_name | last_name  | gender |
++----+------------+------------+--------+
+|  1 | vadi       | velu       | m      |
+|  2 | fahadh     | faasil     | m      |
+|  3 | udayanidhi | stalin     | m      |
+|  4 | keerthy    | suresh     | f      |
+|  5 | kamal      | hasan      | m      |
+|  6 | vijay      | sethubathi | m      |
++----+------------+------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> create table directors(
+    -> id int primary key not null,
+    -> first_name varchar(30) not null,
+    -> last_name varchar(30) not null
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> desc directors;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| id         | int         | NO   | PRI | NULL    |       |
+| first_name | varchar(30) | NO   |     | NULL    |       |
+| last_name  | varchar(30) | NO   |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> insert into directors(id,first_name,last_name) values(1,'mari','selvaraj');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into directors(id,first_name,last_name) values(2,'Lokesh','Kanagaraj');
+Query OK, 1 row affected (0.01 sec)
+
+mysql>  select * from directors;
++----+------------+-----------+
+| id | first_name | last_name |
++----+------------+-----------+
+|  1 | mari       | selvaraj  |
+|  2 | Lokesh     | Kanagaraj |
++----+------------+-----------+
+2 rows in set (0.00 sec)
+
+mysql> create table movie_director(
+    -> director_id int not null,
+    -> movie_id int not null,
+    -> foreign key(director_id)references directors(id),
+    -> foreign key(movie_id)references movie(id)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> desc movie_director;
++-------------+------+------+-----+---------+-------+
+| Field       | Type | Null | Key | Default | Extra |
++-------------+------+------+-----+---------+-------+
+| director_id | int  | NO   | MUL | NULL    |       |
+| movie_id    | int  | NO   | MUL | NULL    |       |
++-------------+------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> insert into movie_director(director_id,movie_id) values(1,1);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into movie_director(director_id,movie_id) values(2,2);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from movie_director;
++-------------+----------+
+| director_id | movie_id |
++-------------+----------+
+|           1 |        1 |
+|           2 |        2 |
++-------------+----------+
+2 rows in set (0.00 sec)
+
+mysql> create table genre(
+    -> id int primary key not null,
+    -> name varchar(20) not null
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> insert into genre(id,name) values(1,'Action');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into genre(id,name) values(2,'Crime');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into genre(id,name) values(3,'Drama');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into genre(id,name) values(4,'Comedy');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into genre(id,name) values(5,'Horror');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into genre(id,name) values(6,'Sci-Fi/Fantasy');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into genre(id,name) values(7,'War Drama');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into genre(id,name) values(8,'Thriller');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from genre;
++----+----------------+
+| id | name           |
++----+----------------+
+|  1 | Action         |
+|  2 | Crime          |
+|  3 | Drama          |
+|  4 | Comedy         |
+|  5 | Horror         |
+|  6 | Sci-Fi/Fantasy |
+|  7 | War Drama      |
+|  8 | Thriller       |
++----+----------------+
+8 rows in set (0.00 sec)
+
+mysql> create table movie_genre(
+    -> movie_id int not null,
+    -> genre_id int not null,
+    -> foreign key (movie_id) references movie(id),
+    -> foreign key (genre_id) references genre(id)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into movie_genre(movie_id,genre_id) values(1,3);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into movie_genre(movie_id,genre_id) values(1,7);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from movie_genre;
++----------+----------+
+| movie_id | genre_id |
++----------+----------+
+|        1 |        3 |
+|        1 |        7 |
++----------+----------+
+2 rows in set (0.00 sec)
+
+mysql> create table multiple_media(
+    -> movie_id int not null,
+    -> id int primary key not null,
+    -> image1_url varchar(255),
+    -> image2_url varchar(255),
+    -> image3_url varchar(255),
+    -> video_url varchar(255) ,
+    -> foreign key(movie_id)references movie(id)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into multiple_media(movie_id,id,image1_url,video_url) values(1,1,'https://www.imdb.com/title/tt20242416/mediaviewer/rm414526465/?ref_=tt_ov_i','https://www.imdb.com/video/vi1572128537/?ref_=ttvi_vi_imdb_1');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into multiple_media(movie_id,id,image2_url,video_url) values(2,2,'https://www.imdb.com/title/tt9179430/mediaviewer/rm1740833281/?ref_=tt_ov_i','https://www.imdb.com/video/vi3381510681/?ref_=ttvi_vi_imdb_5');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from multiple_media;
++----------+----+-----------------------------------------------------------------------------+-----------------------------------------------------------------------------+------------+--------------------------------------------------------------+
+| movie_id | id | image1_url                                                                  | image2_url                                                                  | image3_url | video_url                                                    |
++----------+----+-----------------------------------------------------------------------------+-----------------------------------------------------------------------------+------------+--------------------------------------------------------------+
+|        1 |  1 | https://www.imdb.com/title/tt20242416/mediaviewer/rm414526465/?ref_=tt_ov_i | NULL                                                                        | NULL       | https://www.imdb.com/video/vi1572128537/?ref_=ttvi_vi_imdb_1 |
+|        2 |  2 | NULL                                                                        | https://www.imdb.com/title/tt9179430/mediaviewer/rm1740833281/?ref_=tt_ov_i | NULL       | https://www.imdb.com/video/vi3381510681/?ref_=ttvi_vi_imdb_5 |
++----------+----+-----------------------------------------------------------------------------+-----------------------------------------------------------------------------+------------+--------------------------------------------------------------+
+2 rows in set (0.00 sec)
+
+mysql> create table actor_skills(
+    -> id int primary key not null,
+    -> skill_name varchar(100) not null
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into actor_skills(id,skill_name) values(1,'dance');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into actor_skills(id,skill_name) values(2,'Memorization');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into actor_skills(id,skill_name) values(3,'singing');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into actor_skills(id,skill_name) values(4,'communication');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into actor_skills(id,skill_name) values(5,'Stamina');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into actor_skills(id,skill_name) values(6,'Voice control');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into actor_skills(id,skill_name) values(7,'Script analysis');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into actor_skills(id,skill_name) values(8,'creativity');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from actor_skills;
++----+-----------------+
+| id | skill_name      |
++----+-----------------+
+|  1 | dance           |
+|  2 | Memorization    |
+|  3 | singing         |
+|  4 | communication   |
+|  5 | Stamina         |
+|  6 | Voice control   |
+|  7 | Script analysis |
+|  8 | creativity      |
++----+-----------------+
+8 rows in set (0.00 sec)
+
+mysql> create table actor_skilladd(
+    -> actor_id int not null,
+    -> skill_id int not null,
+    -> foreign key (actor_id) references actor(id),
+    -> foreign key (skill_id) references actor_skills(id)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into actor_skilladd(actor_id,skill_id) values(1,1);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into actor_skilladd(actor_id,skill_id) values(1,2);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into actor_skilladd(actor_id,skill_id) values(5,1);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from actor_skilladd
+    -> ;
++----------+----------+
+| actor_id | skill_id |
++----------+----------+
+|        1 |        1 |
+|        1 |        2 |
+|        5 |        1 |
++----------+----------+
+3 rows in set (0.00 sec)
+
+mysql> create table actor_roles(
+    -> id int primary key not null,
+    -> actor_role varchar(30) not null
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into actor_roles(id,actor_role) values(1,'Regular/lead');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into actor_roles(id,actor_role) values(2,'Supporting');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into actor_roles(id,actor_role) values(3,'Recurring');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into actor_roles(id,actor_role) values(4,'Day player');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into actor_roles(id,actor_role) values(5,'Bit part');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into actor_roles(id,actor_role) values(6,'Guest star');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into actor_roles(id,actor_role) values(7,'Background');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into actor_roles(id,actor_role) values(8,'Body double');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into actor_roles(id,actor_role) values(9,'Stunt double');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from actor_roles;
++----+--------------+
+| id | actor_role   |
++----+--------------+
+|  1 | Regular/lead |
+|  2 | Supporting   |
+|  3 | Recurring    |
+|  4 | Day player   |
+|  5 | Bit part     |
+|  6 | Guest star   |
+|  7 | Background   |
+|  8 | Body double  |
+|  9 | Stunt double |
++----+--------------+
+9 rows in set (0.00 sec)
+
+mysql> create table movie_actor_role(
+    -> movie_id int not null,
+    -> actor_id int not null,
+    -> role_id int not null,
+    -> foreign key (movie_id)references movie(id),
+    -> foreign key (actor_id)references actor(id),
+    -> foreign key (role_id)references actor_roles(id)
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> insert into movie_actor_role(movie_id,actor_id,role_id) values(2,5,1);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from movie_actor_role;
++----------+----------+---------+
+| movie_id | actor_id | role_id |
++----------+----------+---------+
+|        2 |        5 |       1 |
++----------+----------+---------+
+1 row in set (0.00 sec)
+
+mysql> create table review(
+    -> movie_id int not null,
+    -> user_name varchar(30) not null,
+    -> rating decimal(2,1) CONSTRAINT chk_rating CHECK (rating >= 0 AND rating <= 5),
+    -> foreign key(movie_id)references movie(id)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into review(movie_id,user_name,rating) values(1,'abi',5);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into review(movie_id,user_name,rating) values(2,'abi',5);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into review(movie_id,user_name,rating) values(1,'saranya',5);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from review;
++----------+-----------+--------+
+| movie_id | user_name | rating |
++----------+-----------+--------+
+|        1 | abi       |    5.0 |
+|        2 | abi       |    5.0 |
+|        1 | saranya   |    5.0 |
++----------+-----------+--------+
+3 rows in set (0.00 sec)
+
+mysql>
